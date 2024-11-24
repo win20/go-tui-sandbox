@@ -1,4 +1,4 @@
-module win20/go-tui-sandbox
+module gotui
 
 go 1.23.0
 

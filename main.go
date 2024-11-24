@@ -6,6 +6,12 @@ import (
 	"log"
 	"os"
 	"strings"
+	"gotui/internal/tui"
+)
+
+const (
+	width = 96
+	columnWidth = 30
 )
 
 type command struct {
@@ -64,12 +70,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	doc := &strings.Builder{}
 
+	tui.RenderTitleRow(width, doc, tui.TitleRowProps{Title: "GO TUI example"})
+	doc.WriteString("\n\n")
+
 	doc.WriteString(fmt.Sprintf("Cursor: %d", m.cursor))
 	doc.WriteString("\n\n")
 
 	// Footer
 	doc.WriteString("Press q to quit.")
 	doc.WriteString("\n")
+
 
 	// Send UI for rendering
 	return doc.String()
