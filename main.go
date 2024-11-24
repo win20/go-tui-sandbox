@@ -3,26 +3,26 @@ package main
 import (
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
+	"gotui/internal/tui"
 	"log"
 	"os"
 	"strings"
-	"gotui/internal/tui"
 )
 
 const (
-	width = 96
+	width       = 96
 	columnWidth = 30
 )
 
 type command struct {
 	disabled bool
-	name string
+	name     string
 }
 
 type model struct {
 	stateDescription string
-	commands []command
-	cursor int
+	commands         []command
+	cursor           int
 }
 
 func initialModel() model {
@@ -41,29 +41,29 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-  switch msg := msg.(type) {
+	switch msg := msg.(type) {
 
-  // Is it a key press?
-  case tea.KeyMsg:
-    // Cool, what was the actual key pressed?
-    switch msg.String() {
-    // These keys should exit the program.
-    case "ctrl+c", "q":
-      return m, tea.Quit
+	// Is it a key press?
+	case tea.KeyMsg:
+		// Cool, what was the actual key pressed?
+		switch msg.String() {
+		// These keys should exit the program.
+		case "ctrl+c", "q":
+			return m, tea.Quit
 
-    // The "up" and "k" keys move the cursor up
-    case "up", "k":
-      if m.cursor > 0 {
-        m.cursor--
-      }
+		// The "up" and "k" keys move the cursor up
+		case "up", "k":
+			if m.cursor > 0 {
+				m.cursor--
+			}
 
-    // The "down" and "j" keys move the cursor down
-    case "down", "j":
-      if m.cursor < len(m.commands)-1 {
-        m.cursor++
-      }
-    }
-  }
+		// The "down" and "j" keys move the cursor down
+		case "down", "j":
+			if m.cursor < len(m.commands)-1 {
+				m.cursor++
+			}
+		}
+	}
 	return m, nil
 }
 
@@ -79,7 +79,6 @@ func (m model) View() string {
 	// Footer
 	doc.WriteString("Press q to quit.")
 	doc.WriteString("\n")
-
 
 	// Send UI for rendering
 	return doc.String()
