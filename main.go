@@ -21,6 +21,7 @@ type command struct {
 
 type model struct {
 	stateDescription string
+	stateStatus      tui.StatusBarState
 	commands         []command
 	cursor           int
 }
@@ -69,6 +70,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	doc := &strings.Builder{}
+
+	tui.RenderStatusBar(doc, tui.NewStatusBarProps(&tui.StatusBarProps{
+		Description: m.stateDescription,
+		User:        "NONE",
+		StatusState: tui.StatusBarStateBlue,
+		Width:       width,
+	}))
+
 
 	tui.RenderTitleRow(width, doc, tui.TitleRowProps{Title: "GO TUI example"})
 	doc.WriteString("\n\n")
