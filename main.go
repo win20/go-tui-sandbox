@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"gotui/internal/tui"
 	"log"
 	"os"
@@ -24,6 +24,8 @@ type model struct {
 	stateStatus      tui.StatusBarState
 	commands         []command
 	cursor           int
+	secondListHeader string
+	secondListValues []string
 }
 
 func initialModel() model {
@@ -82,8 +84,7 @@ func (m model) View() string {
 	tui.RenderTitleRow(width, doc, tui.TitleRowProps{Title: "GO TUI example"})
 	doc.WriteString("\n\n")
 
-	doc.WriteString(fmt.Sprintf("Cursor: %d", m.cursor))
-	doc.WriteString("\n\n")
+	renderLists(doc, m)
 
 	// Footer
 	doc.WriteString("Press q to quit.")
@@ -91,6 +92,27 @@ func (m model) View() string {
 
 	// Send UI for rendering
 	return doc.String()
+}
+
+func renderLists(doc *strings.Builder, m model) {
+	var items []tui.Item
+	for _, c := range m.commands {
+		items = append(items, tui.Item{
+			Value:    c.name,
+			Disabled: c.disabled,
+		})
+	}	
+
+	lists := lipgloss.JoinHorizontal(lipgloss.Top,
+		tui.RenderListCommands(doc, &tui.ListProps{
+			Items:    items,
+			Selected: m.cursor,
+		}),
+		tui.RenderListDisplay(m.secondListHeader, m.secondListValues),
+	)
+
+	doc.WriteString(lipgloss.JoinHorizontal(lipgloss.Top, lists))
+	doc.WriteString("\n\n")
 }
 
 func main() {
@@ -109,3 +131,4 @@ func main() {
 		log.Fatalf("TUI run error: %v", err)
 	}
 }
+

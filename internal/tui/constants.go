@@ -3,6 +3,11 @@ package tui
 import "github.com/charmbracelet/lipgloss"
 
 const (
+	width = 96
+	columnWidth = 30
+)
+
+const (
 	colorRed    = lipgloss.Color("#f54242")
 	colorYellow = lipgloss.Color("#b0ad09")
 	colorBlue   = lipgloss.Color("#347aeb")
