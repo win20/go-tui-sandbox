@@ -57,12 +57,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// The "up" and "k" keys move the cursor up
 		case "up", "k":
 			if m.cursor > 0 {
+				if m.commands[m.cursor - 1].disabled {
+					m.cursor--
+				}
 				m.cursor--
 			}
 
 		// The "down" and "j" keys move the cursor down
 		case "down", "j":
 			if m.cursor < len(m.commands)-1 {
+				if m.commands[m.cursor + 1].disabled {
+					m.cursor++
+				}
 				m.cursor++
 			}
 		}
